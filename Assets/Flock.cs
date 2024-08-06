@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Flock : MonoBehaviour
 {
     float speed;
+    bool turning = false; 
 
 
     // Start is called before the first frame update
@@ -17,15 +19,36 @@ public class Flock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Random.Range(0, 100) < 10) // randomly reset speed
+        Bounds b = new Bounds(FlockManager.FM.transform.position, FlockManager.FM.swimLimits * 2); // setting a box they have to stay in - kinda like a collision
+
+        if (!b.Contains(transform.position)) // tests the fish's location
         {
-            speed = Random.Range(FlockManager.FM.minSpeed, FlockManager.FM.maxSpeed);
+            turning = true;
+        }
+        else
+        {
+            turning = false;
         }
 
-
-        if (Random.Range(0, 100) < 50) // Randomise chance to happen
+        if (turning)
         {
-            ApplyRules();
+            Vector3 direction= FlockManager.FM.transform.position - transform.position;  // working out the vector that the fish has to go to get back to the centre
+            transform.rotation = Quaternion.Slerp(transform.rotation, 
+                                                    Quaternion.LookRotation(direction),
+                                                    FlockManager.FM.rotationSpeed * Time.deltaTime);
+
+        }
+        else 
+        {
+            if (Random.Range(0, 100) < 10) // randomly reset speed
+            {
+                speed = Random.Range(FlockManager.FM.minSpeed, FlockManager.FM.maxSpeed);
+            }
+
+            if (Random.Range(0, 100) < 50) // Randomise chance to apply rules
+            {
+                ApplyRules();
+            }
         }
 
         this.transform.Translate(0, 0, speed * Time.deltaTime);
