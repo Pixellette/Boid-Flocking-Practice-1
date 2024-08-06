@@ -406,6 +406,8 @@ MonoBehaviour:
   swimLimits: {x: 5, y: 5, z: 5}
   minSpeed: 1
   maxSpeed: 1.89
+  neighbourDistance: 10
+  rotationSpeed: 2.08
 --- !u!4 &2057364534
 Transform:
   m_ObjectHideFlags: 0
