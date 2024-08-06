@@ -10,6 +10,8 @@ public class FlockManager : MonoBehaviour
     public GameObject[] allFish;
     public Vector3 swimLimits = new Vector3(5, 5, 5);
 
+    public Vector3 goalPos = Vector3.zero; 
+
 
     [Header ("Fish Settings")]
     [Range(0.0f, 5.0f)]
@@ -38,11 +40,19 @@ public class FlockManager : MonoBehaviour
         }
 
         FM = this;
+        goalPos = this.transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        // Changing the Goal position
+        if(Random.Range(0,1000) < 10) // aka setting a 10% chance of changing goal positon
+        {
+            goalPos = this.transform.position + new Vector3(Random.Range(-swimLimits.x, swimLimits.x), 
+                                                                Random.Range(-swimLimits.y, swimLimits.y),
+                                                                Random.Range(-swimLimits.z, swimLimits.z));
+            
+        }
     }
 }
